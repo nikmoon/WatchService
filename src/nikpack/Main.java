@@ -27,6 +27,8 @@ public class Main {
                     ENTRY_DELETE,
                     ENTRY_MODIFY);
 
+            StringBuilder message = new StringBuilder(50);
+
             stop_watch:
             for(;;) {
                 WatchKey key;
@@ -39,7 +41,14 @@ public class Main {
 
                     switch (eventKind.toString()) {
                         case "ENTRY_CREATE": {
-                            System.out.println("Создан файл: " + entryPath);
+                            String fileType = Files.probeContentType(entryPath);
+                            message.append("Создан файл: " + entryPath + "; тип файла: ");
+                            if (fileType != null)
+                                message.append("[" + fileType + "]");
+                            else
+                                message.append("[неизвестен]");
+                            System.out.println(message);
+                            message.setLength(0);
                             break;
                         }
                         case "ENTRY_DELETE": {
